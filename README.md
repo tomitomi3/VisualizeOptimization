@@ -2,6 +2,8 @@
 
 This is software which can visualize an optimization process of Nelder-Mead.
 
+Benchmaerk funticon is 2D Rosenbrock.
+
 Nelder-Mead法のシンプレクスの動きをみるソフト。LibOptimizationのサンプルプログラムで視覚化してみたけれども、OxyPlotというグラフライブラリを使って書き直したものです。
 
 Overview
