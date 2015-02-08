@@ -4,12 +4,19 @@ Imports OxyPlot
 Imports LibOptimization.Optimization
 
 Public Class Form1
-    Private opt As Optimization.absOptimization = Nothing
     Private nowStepIndex As Integer = 0
-    Private vertexs As New List(Of List(Of List(Of Double)))
-    Private evals As New List(Of List(Of Double))
+    Dim isClick As Boolean = False
+    Dim previousPoint As Drawing.Point
+    Dim optType As OptSeries = OptSeries.NelderMead
+    Dim hist As absOptimizationHistory = Nothing
 
     Declare Function AllocConsole Lib "kernel32.dll" () As Boolean
+
+    Public Enum OptSeries
+        NelderMead
+        GA_REX
+        GA_SPX
+    End Enum
 
     ''' <summary>
     ''' Load イベント
@@ -33,45 +40,30 @@ Public Class Form1
         'oneshot timer
         oneShotTimer.Start()
 
+        'select
+        Me.cbxSelectOptmization.SelectedIndex = 0
+        optType = OptSeries.NelderMead
+
         'alloc console
         AllocConsole()
     End Sub
 
+    ''' <summary>
+    ''' Init button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub btnInit_Click(sender As Object, e As EventArgs) Handles btnInit.Click
-        'init opt
-        Me.opt = New clsOptNelderMead(New BenchmarkFunction.clsBenchRosenblock(2))
-        Me.opt.Init()
-
-        'Get simplex history
-        vertexs.Clear()
-        evals.Clear()
-        Dim tempSimplex As New List(Of List(Of Double))
-        Dim tempSimplexEvals As New List(Of Double)
-        For Each p As clsPoint In CType(opt, clsOptNelderMead).AllVertexs
-            Dim tempPoint As New clsPoint(p)
-            tempSimplex.Add(tempPoint)
-            tempSimplexEvals.Add(tempPoint.Eval)
-        Next
-        Me.vertexs.Add(tempSimplex)
-        Me.evals.Add(tempSimplexEvals)
-        While (Me.opt.DoIteration(1) = False)
-            tempSimplex = New List(Of List(Of Double))
-            tempSimplexEvals = New List(Of Double)
-            For Each p As clsPoint In CType(opt, clsOptNelderMead).AllVertexs
-                Dim tempPoint As New clsPoint(p)
-                tempSimplex.Add(tempPoint)
-                tempSimplexEvals.Add(tempPoint.Eval)
-            Next
-            Me.vertexs.Add(tempSimplex)
-            Me.evals.Add(tempSimplexEvals)
-        End While
-        Me.nowStepIndex = 0
-
-        Dim hoge() As Double = Me.GetEnvelope()
-
-        Me.DrawInitAxis(hoge(0), hoge(1), hoge(2), hoge(3))
+        InitOpt()
     End Sub
 
+    ''' <summary>
+    ''' "＜"button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
         If nowStepIndex <= 0 Then
             Return
@@ -84,38 +76,33 @@ Public Class Form1
         Me.Draw()
     End Sub
 
+    ''' <summary>
+    ''' "＞"button
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If nowStepIndex + 1 >= vertexs.Count Then
+        If nowStepIndex + 1 >= hist.IterationCount Then
             Return
         Else
             nowStepIndex += CInt(Me.tbxSkip.Text)
-            If nowStepIndex >= Me.vertexs.Count Then
-                nowStepIndex = Me.vertexs.Count - 1
+            If nowStepIndex >= hist.IterationCount Then
+                nowStepIndex = hist.IterationCount - 1
             End If
         End If
         Me.Draw()
     End Sub
 
+    ''' <summary>
+    ''' Ontshot
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub oneShotTimer_Tick(sender As Object, e As EventArgs) Handles oneShotTimer.Tick
         oneShotTimer.Stop()
         Me.DrawInitAxis(-1, -1, 2, 2, False)
-    End Sub
-
-    Private Sub oPlot_Paint(sender As Object, e As PaintEventArgs) Handles oPlot.Paint
-        'Console.WriteLine("{0},{1}", Me.oPlot.Model.DefaultXAxis.ActualMinimum, Me.oPlot.Model.DefaultXAxis.ActualMaximum)
-        'Dim zeroCrossXAxis = New LineSeries()
-        'zeroCrossXAxis.Points.Add(New DataPoint(Me.oPlot.Model.DefaultXAxis.ActualMinimum, 0))
-        'zeroCrossXAxis.Points.Add(New DataPoint(Me.oPlot.Model.DefaultXAxis.ActualMaximum, 0))
-        'zeroCrossXAxis.Color = OxyColors.Black
-        'zeroCrossXAxis.StrokeThickness = 0.5
-        'Me.oPlot.Model.Series.Add(zeroCrossXAxis)
-
-        'Dim zeroCrossYAxis = New LineSeries()
-        'zeroCrossYAxis.Points.Add(New DataPoint(0, Me.oPlot.Model.DefaultYAxis.ActualMinimum))
-        'zeroCrossYAxis.Points.Add(New DataPoint(0, Me.oPlot.Model.DefaultYAxis.ActualMaximum))
-        'zeroCrossYAxis.Color = OxyColors.Black
-        'zeroCrossYAxis.StrokeThickness = 0.5
-        'Me.oPlot.Model.Series.Add(zeroCrossYAxis)
     End Sub
 
     ''' <summary>
@@ -127,8 +114,7 @@ Public Class Form1
     ''' <param name="ai_height"></param>
     ''' <param name="ai_isDraw"></param>
     ''' <remarks></remarks>
-    Private Sub DrawInitAxis(ByVal ai_x As Double, ByVal ai_y As Double, ByVal ai_width As Double, ByVal ai_height As Double, _
-                         Optional ByVal ai_isDraw As Boolean = True)
+    Private Sub DrawInitAxis(ByVal ai_x As Double, ByVal ai_y As Double, ByVal ai_width As Double, ByVal ai_height As Double, Optional ByVal ai_isDraw As Boolean = True)
         Me.oPlot.Model.Series.Clear()
         Me.oPlot.Model.Axes.Clear()
 
@@ -175,7 +161,32 @@ Public Class Form1
     Private Sub Draw()
         Me.oPlot.Model.Series.Clear()
 
-        'Point
+        'draw
+        If Me.optType = OptSeries.NelderMead Then
+            'Line
+            Dim simplex = New LineSeries()
+            simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(0)(0), Me.hist.Points(nowStepIndex)(0)(1)))
+            simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(1)(0), Me.hist.Points(nowStepIndex)(1)(1)))
+            simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(2)(0), Me.hist.Points(nowStepIndex)(2)(1)))
+            simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(0)(0), Me.hist.Points(nowStepIndex)(0)(1)))
+            simplex.Color = OxyColors.Red
+            simplex.StrokeThickness = 1
+            Me.oPlot.Model.Series.Add(simplex)
+            Console.WriteLine("{0} , {1} , {2}", Me.hist.Evals(Me.nowStepIndex)(0), Me.hist.Evals(Me.nowStepIndex)(1), Me.hist.Evals(Me.nowStepIndex)(2))
+            Console.WriteLine(" {0} , {1}", hist.Points(Me.nowStepIndex)(0)(0), hist.Points(Me.nowStepIndex)(0)(1))
+            Console.WriteLine(" {0} , {1}", hist.Points(Me.nowStepIndex)(1)(0), hist.Points(Me.nowStepIndex)(1)(1))
+            Console.WriteLine(" {0} , {1}", hist.Points(Me.nowStepIndex)(2)(0), hist.Points(Me.nowStepIndex)(2)(1))
+        Else
+            Dim allPoints = New ScatterSeries()
+            For i As Integer = 0 To Me.hist.Evals(0).Count - 1
+                allPoints.Points.Add(New ScatterPoint(Me.hist.Points(nowStepIndex)(i)(0), Me.hist.Points(nowStepIndex)(i)(1)))
+            Next
+            allPoints.MarkerSize = 1
+            allPoints.TextColor = OxyColors.Green
+            Me.oPlot.Model.Series.Add(allPoints)
+        End If
+
+        'BestPoint
         Dim points = New ScatterSeries()
         points.Points.Add(New ScatterPoint(1, 1))
         points.Points.Add(New ScatterPoint(1, 1))
@@ -183,33 +194,18 @@ Public Class Form1
         points.TextColor = OxyColors.Black
         Me.oPlot.Model.Series.Add(points)
 
-        'draw simplex
-
-        'Line
-        Dim simplexPoint = New LineSeries()
-        simplexPoint.Points.Add(New DataPoint(Me.vertexs(nowStepIndex)(0)(0), Me.vertexs(nowStepIndex)(0)(1)))
-        simplexPoint.Points.Add(New DataPoint(Me.vertexs(nowStepIndex)(1)(0), Me.vertexs(nowStepIndex)(1)(1)))
-        simplexPoint.Points.Add(New DataPoint(Me.vertexs(nowStepIndex)(2)(0), Me.vertexs(nowStepIndex)(2)(1)))
-        simplexPoint.Points.Add(New DataPoint(Me.vertexs(nowStepIndex)(0)(0), Me.vertexs(nowStepIndex)(0)(1)))
-        simplexPoint.Color = OxyColors.Red
-        simplexPoint.StrokeThickness = 1
-        Me.oPlot.Model.Series.Add(simplexPoint)
-
-        Console.WriteLine("{0} , {1} , {2}", Me.evals(Me.nowStepIndex)(0), Me.evals(Me.nowStepIndex)(1), Me.evals(Me.nowStepIndex)(2))
-        Console.WriteLine(" {0} , {1}", vertexs(Me.nowStepIndex)(0)(0), vertexs(Me.nowStepIndex)(0)(1))
-        Console.WriteLine(" {0} , {1}", vertexs(Me.nowStepIndex)(1)(0), vertexs(Me.nowStepIndex)(1)(1))
-        Console.WriteLine(" {0} , {1}", vertexs(Me.nowStepIndex)(2)(0), vertexs(Me.nowStepIndex)(2)(1))
-
         'update label
         Me.UpdateLabel()
         Me.oPlot.InvalidatePlot(True)
     End Sub
 
     Private Sub UpdateLabel()
-        If Me.vertexs.Count = 0 Then
+        If Me.hist Is Nothing Then
+            Me.lblIndex.Text = ""
+        ElseIf hist.IterationCount = 0 Then
             Me.lblIndex.Text = String.Format("Step : {0}/{1}", 0, 0)
         Else
-            Me.lblIndex.Text = String.Format("Step : {0}/{1}", Me.nowStepIndex + 1, Me.vertexs.Count)
+            Me.lblIndex.Text = String.Format("Step : {0}/{1}", Me.nowStepIndex + 1, hist.IterationCount)
         End If
     End Sub
 
@@ -217,20 +213,15 @@ Public Class Form1
         'get envelope
         Dim arx As New List(Of Double)
         Dim ary As New List(Of Double)
-        arx.Add(1.0)
-        ary.Add(1.0)
-        For i As Integer = 0 To Me.vertexs(0).Count - 1
-            arx.Add(Me.vertexs(0)(i)(0))
-            ary.Add(Me.vertexs(0)(i)(1))
+        For i As Integer = 0 To Me.hist.Points(0).Count - 1
+            arx.Add(Me.hist.Points(0)(i)(0))
+            ary.Add(Me.hist.Points(0)(i)(1))
         Next
         arx.Sort()
         ary.Sort()
-
         Return New Double() {arx(0), ary(0), arx(arx.Count - 1) - arx(0), ary(ary.Count - 1) - ary(0)}
     End Function
 
-    Dim isClick As Boolean = False
-    Dim previousPoint As Drawing.Point
     Private Sub Panel1_MouseDown(sender As Object, e As MouseEventArgs) Handles ctrlPanel.MouseDown
         isClick = True
         previousPoint = e.Location
@@ -247,5 +238,30 @@ Public Class Form1
 
     Private Sub Panel1_MouseUp(sender As Object, e As MouseEventArgs) Handles ctrlPanel.MouseUp
         isClick = False
+    End Sub
+
+    Private Sub cbxSelectOptmization_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxSelectOptmization.SelectedIndexChanged
+        If Me.cbxSelectOptmization.SelectedIndex = OptSeries.NelderMead Then
+            Me.optType = OptSeries.NelderMead
+        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.GA_REX Then
+            Me.optType = OptSeries.GA_REX
+        Else
+            Me.optType = OptSeries.GA_SPX
+        End If
+    End Sub
+
+    Private Sub InitOpt()
+        If Me.optType = OptSeries.NelderMead Then
+            Me.hist = New clsOptHistoryNelderMead()
+        ElseIf Me.optType = OptSeries.GA_REX Then
+            Me.hist = New clsOptHistoryRGAREX()
+        Else : Me.optType = OptSeries.GA_SPX
+            Me.hist = New clsOptHistoryRGASPX()
+        End If
+
+        Me.nowStepIndex = 0
+
+        Dim tempAxis() As Double = Me.GetEnvelope()
+        Me.DrawInitAxis(tempAxis(0), tempAxis(1), tempAxis(2), tempAxis(3))
     End Sub
 End Class

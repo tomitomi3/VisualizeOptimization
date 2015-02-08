@@ -26,6 +26,7 @@ Partial Class Form1
         Me.oPlot = New OxyPlot.WindowsForms.Plot()
         Me.oneShotTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ctrlPanel = New System.Windows.Forms.Panel()
+        Me.cbxSelectOptmization = New System.Windows.Forms.ComboBox()
         Me.lblIndex = New System.Windows.Forms.Label()
         Me.tbxSkip = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -41,7 +42,7 @@ Partial Class Form1
         Me.oPlot.Location = New System.Drawing.Point(0, 0)
         Me.oPlot.Name = "oPlot"
         Me.oPlot.PanCursor = System.Windows.Forms.Cursors.Hand
-        Me.oPlot.Size = New System.Drawing.Size(600, 600)
+        Me.oPlot.Size = New System.Drawing.Size(400, 400)
         Me.oPlot.TabIndex = 1
         Me.oPlot.Text = "Plot1"
         Me.oPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE
@@ -54,6 +55,7 @@ Partial Class Form1
         '
         'ctrlPanel
         '
+        Me.ctrlPanel.Controls.Add(Me.cbxSelectOptmization)
         Me.ctrlPanel.Controls.Add(Me.lblIndex)
         Me.ctrlPanel.Controls.Add(Me.tbxSkip)
         Me.ctrlPanel.Controls.Add(Me.Label1)
@@ -64,6 +66,15 @@ Partial Class Form1
         Me.ctrlPanel.Name = "ctrlPanel"
         Me.ctrlPanel.Size = New System.Drawing.Size(269, 56)
         Me.ctrlPanel.TabIndex = 2
+        '
+        'cbxSelectOptmization
+        '
+        Me.cbxSelectOptmization.FormattingEnabled = True
+        Me.cbxSelectOptmization.Items.AddRange(New Object() {"NelderMead", "Genetic Algorithm REX with JGG", "Genetic Algorithm SPX with JGG"})
+        Me.cbxSelectOptmization.Location = New System.Drawing.Point(122, 30)
+        Me.cbxSelectOptmization.Name = "cbxSelectOptmization"
+        Me.cbxSelectOptmization.Size = New System.Drawing.Size(141, 20)
+        Me.cbxSelectOptmization.TabIndex = 3
         '
         'lblIndex
         '
@@ -121,7 +132,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(600, 600)
+        Me.ClientSize = New System.Drawing.Size(400, 400)
         Me.Controls.Add(Me.ctrlPanel)
         Me.Controls.Add(Me.oPlot)
         Me.Name = "Form1"
@@ -140,5 +151,6 @@ Partial Class Form1
     Friend WithEvents btnInit As System.Windows.Forms.Button
     Friend WithEvents btnNext As System.Windows.Forms.Button
     Friend WithEvents btnBack As System.Windows.Forms.Button
+    Friend WithEvents cbxSelectOptmization As System.Windows.Forms.ComboBox
 
 End Class
