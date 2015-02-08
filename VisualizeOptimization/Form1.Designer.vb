@@ -42,7 +42,7 @@ Partial Class Form1
         Me.oPlot.Location = New System.Drawing.Point(0, 0)
         Me.oPlot.Name = "oPlot"
         Me.oPlot.PanCursor = System.Windows.Forms.Cursors.Hand
-        Me.oPlot.Size = New System.Drawing.Size(400, 400)
+        Me.oPlot.Size = New System.Drawing.Size(600, 600)
         Me.oPlot.TabIndex = 1
         Me.oPlot.Text = "Plot1"
         Me.oPlot.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE
@@ -132,7 +132,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(400, 400)
+        Me.ClientSize = New System.Drawing.Size(600, 600)
         Me.Controls.Add(Me.ctrlPanel)
         Me.Controls.Add(Me.oPlot)
         Me.Name = "Form1"

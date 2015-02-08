@@ -169,7 +169,7 @@ Public Class Form1
             simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(1)(0), Me.hist.Points(nowStepIndex)(1)(1)))
             simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(2)(0), Me.hist.Points(nowStepIndex)(2)(1)))
             simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(0)(0), Me.hist.Points(nowStepIndex)(0)(1)))
-            simplex.Color = OxyColors.Red
+            simplex.Color = OxyColors.Blue
             simplex.StrokeThickness = 1
             Me.oPlot.Model.Series.Add(simplex)
             Console.WriteLine("{0} , {1} , {2}", Me.hist.Evals(Me.nowStepIndex)(0), Me.hist.Evals(Me.nowStepIndex)(1), Me.hist.Evals(Me.nowStepIndex)(2))
@@ -178,20 +178,20 @@ Public Class Form1
             Console.WriteLine(" {0} , {1}", hist.Points(Me.nowStepIndex)(2)(0), hist.Points(Me.nowStepIndex)(2)(1))
         Else
             Dim allPoints = New ScatterSeries()
+            allPoints.MarkerType = MarkerType.Circle
             For i As Integer = 0 To Me.hist.Evals(0).Count - 1
                 allPoints.Points.Add(New ScatterPoint(Me.hist.Points(nowStepIndex)(i)(0), Me.hist.Points(nowStepIndex)(i)(1)))
             Next
-            allPoints.MarkerSize = 1
-            allPoints.TextColor = OxyColors.Green
+            allPoints.MarkerSize = 1.5
             Me.oPlot.Model.Series.Add(allPoints)
         End If
 
         'BestPoint
         Dim points = New ScatterSeries()
+        points.MarkerType = MarkerType.Circle
         points.Points.Add(New ScatterPoint(1, 1))
         points.Points.Add(New ScatterPoint(1, 1))
         points.MarkerSize = 2
-        points.TextColor = OxyColors.Black
         Me.oPlot.Model.Series.Add(points)
 
         'update label
