@@ -64,22 +64,22 @@ Partial Class Form1
         Me.ctrlPanel.Controls.Add(Me.btnBack)
         Me.ctrlPanel.Location = New System.Drawing.Point(12, 12)
         Me.ctrlPanel.Name = "ctrlPanel"
-        Me.ctrlPanel.Size = New System.Drawing.Size(269, 56)
+        Me.ctrlPanel.Size = New System.Drawing.Size(457, 59)
         Me.ctrlPanel.TabIndex = 2
         '
         'cbxSelectOptmization
         '
         Me.cbxSelectOptmization.FormattingEnabled = True
-        Me.cbxSelectOptmization.Items.AddRange(New Object() {"NelderMead", "Genetic Algorithm REX with JGG", "Genetic Algorithm SPX with JGG"})
-        Me.cbxSelectOptmization.Location = New System.Drawing.Point(122, 30)
+        Me.cbxSelectOptmization.Items.AddRange(New Object() {"NelderMead", "PatternSearch", "Genetic Algorithm REX with JGG", "Genetic Algorithm SPX with JGG"})
+        Me.cbxSelectOptmization.Location = New System.Drawing.Point(3, 5)
         Me.cbxSelectOptmization.Name = "cbxSelectOptmization"
-        Me.cbxSelectOptmization.Size = New System.Drawing.Size(141, 20)
+        Me.cbxSelectOptmization.Size = New System.Drawing.Size(184, 20)
         Me.cbxSelectOptmization.TabIndex = 3
         '
         'lblIndex
         '
         Me.lblIndex.AutoSize = True
-        Me.lblIndex.Location = New System.Drawing.Point(3, 33)
+        Me.lblIndex.Location = New System.Drawing.Point(8, 36)
         Me.lblIndex.Name = "lblIndex"
         Me.lblIndex.Size = New System.Drawing.Size(78, 12)
         Me.lblIndex.TabIndex = 6
@@ -87,7 +87,7 @@ Partial Class Form1
         '
         'tbxSkip
         '
-        Me.tbxSkip.Location = New System.Drawing.Point(222, 5)
+        Me.tbxSkip.Location = New System.Drawing.Point(410, 5)
         Me.tbxSkip.Name = "tbxSkip"
         Me.tbxSkip.Size = New System.Drawing.Size(41, 19)
         Me.tbxSkip.TabIndex = 11
@@ -95,7 +95,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(162, 8)
+        Me.Label1.Location = New System.Drawing.Point(350, 8)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(54, 12)
         Me.Label1.TabIndex = 10
@@ -103,7 +103,7 @@ Partial Class Form1
         '
         'btnInit
         '
-        Me.btnInit.Location = New System.Drawing.Point(3, 3)
+        Me.btnInit.Location = New System.Drawing.Point(193, 3)
         Me.btnInit.Name = "btnInit"
         Me.btnInit.Size = New System.Drawing.Size(75, 23)
         Me.btnInit.TabIndex = 7
@@ -112,7 +112,7 @@ Partial Class Form1
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(122, 3)
+        Me.btnNext.Location = New System.Drawing.Point(312, 3)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(32, 23)
         Me.btnNext.TabIndex = 9
@@ -121,7 +121,7 @@ Partial Class Form1
         '
         'btnBack
         '
-        Me.btnBack.Location = New System.Drawing.Point(84, 3)
+        Me.btnBack.Location = New System.Drawing.Point(274, 3)
         Me.btnBack.Name = "btnBack"
         Me.btnBack.Size = New System.Drawing.Size(32, 23)
         Me.btnBack.TabIndex = 8

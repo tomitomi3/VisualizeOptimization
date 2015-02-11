@@ -1,7 +1,7 @@
 ﻿Imports LibOptimization
 Imports LibOptimization.Optimization
 
-Public Class clsOptHistoryRGASPX : Inherits absOptimizationHistory
+Public Class clsOptHistoryHookeJeeves : Inherits absOptimizationHistory
     Private histroyPoints As New List(Of List(Of List(Of Double)))
     Private histroyEvals As New List(Of List(Of Double))
 
@@ -10,13 +10,13 @@ Public Class clsOptHistoryRGASPX : Inherits absOptimizationHistory
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New()
-        Me.opt = New clsOptRealGASPX(New BenchmarkFunction.clsBenchRosenblock(2), ai_populationSize:=1000)
+        Me.opt = New clsOptPatternSearch(New BenchmarkFunction.clsBenchRosenblock(2))
         Me.opt.Init()
 
         'initial value
         Dim oneStepPoints As New List(Of List(Of Double))
         Dim oneStepEvals As New List(Of Double)
-        For Each p As clsPoint In CType(opt, clsOptRealGASPX).ResultForDebug
+        For Each p As clsPoint In opt.ResultForDebug
             Dim tempPoint As New clsPoint(p)
             oneStepPoints.Add(tempPoint)
             oneStepEvals.Add(tempPoint.Eval)
@@ -28,7 +28,7 @@ Public Class clsOptHistoryRGASPX : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             oneStepPoints = New List(Of List(Of Double))
             oneStepEvals = New List(Of Double)
-            For Each p As clsPoint In CType(opt, clsOptRealGASPX).ResultForDebug
+            For Each p As clsPoint In opt.ResultForDebug
                 Dim tempPoint As New clsPoint(p)
                 oneStepPoints.Add(tempPoint)
                 oneStepEvals.Add(tempPoint.Eval)

@@ -16,7 +16,7 @@ Public Class clsOptHistoryNelderMead : Inherits absOptimizationHistory
         'Get simplex history
         Dim tempSimplex As New List(Of List(Of Double))
         Dim tempSimplexEvals As New List(Of Double)
-        For Each p As clsPoint In CType(opt, clsOptNelderMead).AllResult
+        For Each p As clsPoint In CType(opt, clsOptNelderMead).ResultForDebug
             Dim tempPoint As New clsPoint(p)
             tempSimplex.Add(tempPoint)
             tempSimplexEvals.Add(tempPoint.Eval)
@@ -26,7 +26,7 @@ Public Class clsOptHistoryNelderMead : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             tempSimplex = New List(Of List(Of Double))
             tempSimplexEvals = New List(Of Double)
-            For Each p As clsPoint In CType(opt, clsOptNelderMead).AllResult
+            For Each p As clsPoint In CType(opt, clsOptNelderMead).ResultForDebug
                 Dim tempPoint As New clsPoint(p)
                 tempSimplex.Add(tempPoint)
                 tempSimplexEvals.Add(tempPoint.Eval)

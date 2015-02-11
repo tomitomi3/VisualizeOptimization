@@ -14,6 +14,7 @@ Public Class Form1
 
     Public Enum OptSeries
         NelderMead
+        PatternSearch
         GA_REX
         GA_SPX
     End Enum
@@ -243,6 +244,8 @@ Public Class Form1
     Private Sub cbxSelectOptmization_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxSelectOptmization.SelectedIndexChanged
         If Me.cbxSelectOptmization.SelectedIndex = OptSeries.NelderMead Then
             Me.optType = OptSeries.NelderMead
+        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.PatternSearch Then
+            Me.optType = OptSeries.PatternSearch
         ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.GA_REX Then
             Me.optType = OptSeries.GA_REX
         Else
@@ -253,6 +256,8 @@ Public Class Form1
     Private Sub InitOpt()
         If Me.optType = OptSeries.NelderMead Then
             Me.hist = New clsOptHistoryNelderMead()
+        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.PatternSearch Then
+            Me.hist = New clsOptHistoryHookeJeeves()
         ElseIf Me.optType = OptSeries.GA_REX Then
             Me.hist = New clsOptHistoryRGAREX()
         Else : Me.optType = OptSeries.GA_SPX
@@ -261,7 +266,8 @@ Public Class Form1
 
         Me.nowStepIndex = 0
 
-        Dim tempAxis() As Double = Me.GetEnvelope()
-        Me.DrawInitAxis(tempAxis(0), tempAxis(1), tempAxis(2), tempAxis(3))
+        'Dim tempAxis() As Double = Me.GetEnvelope()
+        'Me.DrawInitAxis(tempAxis(0), tempAxis(1), tempAxis(2), tempAxis(3))
+        Me.DrawInitAxis(-5, -5, 10, 10)
     End Sub
 End Class

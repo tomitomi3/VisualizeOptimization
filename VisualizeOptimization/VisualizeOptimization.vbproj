@@ -67,9 +67,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibOptimization, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LibOptimization, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibOptimization.1.1.0.0\lib\net40\LibOptimization.dll</HintPath>
+      <HintPath>..\packages\LibOptimization.1.1.2.0\lib\net40\LibOptimization.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.Core.2014.1.546\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>
@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="absOptimizationHistory.vb" />
+    <Compile Include="clsOptHistoryHookeJeeves.vb" />
     <Compile Include="clsOptHistoryRGAREX.vb" />
     <Compile Include="clsOptHistoryRGASPX.vb" />
     <Compile Include="clsOptHistoryNelderMead.vb" />
