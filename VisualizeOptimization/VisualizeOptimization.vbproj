@@ -67,9 +67,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibOptimization, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LibOptimization, Version=1.4.1.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibOptimization.1.4.1.0\lib\net40\LibOptimization.dll</HintPath>
+      <HintPath>..\packages\LibOptimization.1.4.1.1\lib\net40\LibOptimization.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.Core.2014.1.546\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>

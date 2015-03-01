@@ -21,6 +21,7 @@ Public Class clsOptHistoryRGASPX : Inherits absOptimizationHistory
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
         Me.opt = New clsOptRealGASPX(ai_func)
         If ai_fixRandomSeed = True Then
+            Util.clsRandomXorshiftSingleton.GetInstance().SetSeed(123456)
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
         End If
         Me.opt.Init()
