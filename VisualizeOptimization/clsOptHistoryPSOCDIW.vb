@@ -1,7 +1,7 @@
 ﻿Imports LibOptimization
 Imports LibOptimization.Optimization
 
-Public Class clsOptHistoryHookeJeeves : Inherits absOptimizationHistory
+Public Class clsOptHistoryPSOCDIW : Inherits absOptimizationHistory
     Private histroyPoints As New List(Of List(Of List(Of Double)))
     Private histroyEvals As New List(Of List(Of Double))
 
@@ -19,7 +19,7 @@ Public Class clsOptHistoryHookeJeeves : Inherits absOptimizationHistory
     ''' <param name="ai_func"></param>
     ''' <remarks></remarks>
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
-        Me.opt = New clsOptPatternSearch(ai_func)
+        Me.opt = New clsOptPSOChaoticIW(ai_func)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
         End If

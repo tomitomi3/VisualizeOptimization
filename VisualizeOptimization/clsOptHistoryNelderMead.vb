@@ -10,13 +10,25 @@ Public Class clsOptHistoryNelderMead : Inherits absOptimizationHistory
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New()
-        Me.opt = New clsOptNelderMead(New BenchmarkFunction.clsBenchRosenblock(2))
+        'nop
+    End Sub
+
+    ''' <summary>
+    ''' Initialize
+    ''' </summary>
+    ''' <param name="ai_func"></param>
+    ''' <remarks></remarks>
+    Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
+        Me.opt = New clsOptNelderMead(ai_func)
+        If ai_fixRandomSeed = True Then
+            Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
+        End If
         Me.opt.Init()
 
         'Get simplex history
         Dim tempSimplex As New List(Of List(Of Double))
         Dim tempSimplexEvals As New List(Of Double)
-        For Each p As clsPoint In CType(opt, clsOptNelderMead).ResultForDebug
+        For Each p As clsPoint In opt.ResultForDebug
             Dim tempPoint As New clsPoint(p)
             tempSimplex.Add(tempPoint)
             tempSimplexEvals.Add(tempPoint.Eval)
@@ -26,7 +38,7 @@ Public Class clsOptHistoryNelderMead : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             tempSimplex = New List(Of List(Of Double))
             tempSimplexEvals = New List(Of Double)
-            For Each p As clsPoint In CType(opt, clsOptNelderMead).ResultForDebug
+            For Each p As clsPoint In opt.ResultForDebug
                 Dim tempPoint As New clsPoint(p)
                 tempSimplex.Add(tempPoint)
                 tempSimplexEvals.Add(tempPoint.Eval)

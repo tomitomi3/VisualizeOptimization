@@ -1,7 +1,7 @@
 ﻿Imports LibOptimization
 Imports LibOptimization.Optimization
 
-Public Class clsOptHistoryHookeJeeves : Inherits absOptimizationHistory
+Public Class clsOptHistoryNelderMeadWiki : Inherits absOptimizationHistory
     Private histroyPoints As New List(Of List(Of List(Of Double)))
     Private histroyEvals As New List(Of List(Of Double))
 
@@ -19,34 +19,32 @@ Public Class clsOptHistoryHookeJeeves : Inherits absOptimizationHistory
     ''' <param name="ai_func"></param>
     ''' <remarks></remarks>
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
-        Me.opt = New clsOptPatternSearch(ai_func)
+        Me.opt = New clsOptNelderMeadWiki(ai_func)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
         End If
         Me.opt.Init()
 
-        'initial value
-        Dim oneStepPoints As New List(Of List(Of Double))
-        Dim oneStepEvals As New List(Of Double)
+        'Get simplex history
+        Dim tempSimplex As New List(Of List(Of Double))
+        Dim tempSimplexEvals As New List(Of Double)
         For Each p As clsPoint In opt.ResultForDebug
             Dim tempPoint As New clsPoint(p)
-            oneStepPoints.Add(tempPoint)
-            oneStepEvals.Add(tempPoint.Eval)
+            tempSimplex.Add(tempPoint)
+            tempSimplexEvals.Add(tempPoint.Eval)
         Next
-        Me.histroyPoints.Add(oneStepPoints)
-        Me.histroyEvals.Add(oneStepEvals)
-
-        'all step
+        Me.histroyPoints.Add(tempSimplex)
+        Me.histroyEvals.Add(tempSimplexEvals)
         While (Me.opt.DoIteration(1) = False)
-            oneStepPoints = New List(Of List(Of Double))
-            oneStepEvals = New List(Of Double)
+            tempSimplex = New List(Of List(Of Double))
+            tempSimplexEvals = New List(Of Double)
             For Each p As clsPoint In opt.ResultForDebug
                 Dim tempPoint As New clsPoint(p)
-                oneStepPoints.Add(tempPoint)
-                oneStepEvals.Add(tempPoint.Eval)
+                tempSimplex.Add(tempPoint)
+                tempSimplexEvals.Add(tempPoint.Eval)
             Next
-            Me.histroyPoints.Add(oneStepPoints)
-            Me.histroyEvals.Add(oneStepEvals)
+            Me.histroyPoints.Add(tempSimplex)
+            Me.histroyEvals.Add(tempSimplexEvals)
         End While
     End Sub
 

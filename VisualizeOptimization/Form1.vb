@@ -7,16 +7,21 @@ Public Class Form1
     Private nowStepIndex As Integer = 0
     Dim isClick As Boolean = False
     Dim previousPoint As Drawing.Point
-    Dim optType As OptSeries = OptSeries.NelderMead
     Dim hist As absOptimizationHistory = Nothing
 
     Declare Function AllocConsole Lib "kernel32.dll" () As Boolean
 
-    Public Enum OptSeries
+    Public Enum EnumOptSeries
         NelderMead
+        NelderMeadWiki
         PatternSearch
-        GA_REX
-        GA_SPX
+        GeneticAlgorithmREXwithJGG
+        GeneticAlgorithmSPXwithJGG
+        PSO
+        PSOusingLDIW
+        PSOusingCDIW
+        PSOusingCRIW
+        PSOusingAIW
     End Enum
 
     ''' <summary>
@@ -41,12 +46,14 @@ Public Class Form1
         'oneshot timer
         oneShotTimer.Start()
 
-        'select
+        'combobox init
+        For Each item In [Enum].GetValues(GetType(Form1.EnumOptSeries))
+            Me.cbxSelectOptmization.Items.Add(item.ToString())
+        Next
         Me.cbxSelectOptmization.SelectedIndex = 0
-        optType = OptSeries.NelderMead
 
         'alloc console
-        AllocConsole()
+        'AllocConsole()
     End Sub
 
     ''' <summary>
@@ -103,7 +110,7 @@ Public Class Form1
     ''' <remarks></remarks>
     Private Sub oneShotTimer_Tick(sender As Object, e As EventArgs) Handles oneShotTimer.Tick
         oneShotTimer.Stop()
-        Me.DrawInitAxis(-1, -1, 2, 2, False)
+        Me.DrawInitAxis(-5, -5, 10, 10, False)
     End Sub
 
     ''' <summary>
@@ -163,7 +170,7 @@ Public Class Form1
         Me.oPlot.Model.Series.Clear()
 
         'draw
-        If Me.optType = OptSeries.NelderMead Then
+        If Me.cbxSelectOptmization.SelectedIndex = EnumOptSeries.NelderMead OrElse Me.cbxSelectOptmization.SelectedIndex = EnumOptSeries.NelderMeadWiki Then
             'Line
             Dim simplex = New LineSeries()
             simplex.Points.Add(New DataPoint(Me.hist.Points(nowStepIndex)(0)(0), Me.hist.Points(nowStepIndex)(0)(1)))
@@ -206,7 +213,11 @@ Public Class Form1
         ElseIf hist.IterationCount = 0 Then
             Me.lblIndex.Text = String.Format("Step : {0}/{1}", 0, 0)
         Else
-            Me.lblIndex.Text = String.Format("Step : {0}/{1}", Me.nowStepIndex + 1, hist.IterationCount)
+            Dim temp = hist.Evals(Me.nowStepIndex).ToList()
+            temp.Sort()
+            Dim eval As Double = temp(temp.Count - 1)
+
+            Me.lblIndex.Text = String.Format("Step : {0}/{1} Eval : {2}", Me.nowStepIndex + 1, hist.IterationCount, eval)
         End If
     End Sub
 
@@ -241,28 +252,34 @@ Public Class Form1
         isClick = False
     End Sub
 
-    Private Sub cbxSelectOptmization_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxSelectOptmization.SelectedIndexChanged
-        If Me.cbxSelectOptmization.SelectedIndex = OptSeries.NelderMead Then
-            Me.optType = OptSeries.NelderMead
-        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.PatternSearch Then
-            Me.optType = OptSeries.PatternSearch
-        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.GA_REX Then
-            Me.optType = OptSeries.GA_REX
-        Else
-            Me.optType = OptSeries.GA_SPX
-        End If
-    End Sub
-
     Private Sub InitOpt()
-        If Me.optType = OptSeries.NelderMead Then
+        Dim tempType = Me.cbxSelectOptmization.SelectedIndex
+        If tempType = EnumOptSeries.NelderMead Then
             Me.hist = New clsOptHistoryNelderMead()
-        ElseIf Me.cbxSelectOptmization.SelectedIndex = OptSeries.PatternSearch Then
+        ElseIf tempType = EnumOptSeries.NelderMeadWiki Then
+            Me.hist = New clsOptHistoryNelderMeadWiki()
+        ElseIf tempType = EnumOptSeries.PatternSearch Then
             Me.hist = New clsOptHistoryHookeJeeves()
-        ElseIf Me.optType = OptSeries.GA_REX Then
+        ElseIf tempType = EnumOptSeries.GeneticAlgorithmREXwithJGG Then
             Me.hist = New clsOptHistoryRGAREX()
-        Else : Me.optType = OptSeries.GA_SPX
+        ElseIf tempType = EnumOptSeries.GeneticAlgorithmSPXwithJGG Then
             Me.hist = New clsOptHistoryRGASPX()
+        ElseIf tempType = EnumOptSeries.PSO Then
+            Me.hist = New clsOptHistoryPSO()
+        ElseIf tempType = EnumOptSeries.PSOusingLDIW Then
+            Me.hist = New clsOptHistoryPSOLDIW()
+        ElseIf tempType = EnumOptSeries.PSOusingCDIW Then
+            Me.hist = New clsOptHistoryPSOCDIW()
+        ElseIf tempType = EnumOptSeries.PSOusingCRIW Then
+            Me.hist = New clsOptHistoryPSOCRIW()
+        ElseIf tempType = EnumOptSeries.PSOusingAIW Then
+            Me.hist = New clsOptHistoryPSOAIW()
+        Else
+            Me.hist = New clsOptHistoryPSOAIW()
         End If
+
+        'initialize
+        Me.hist.Init(New LibOptimization.BenchmarkFunction.clsBenchRosenblock(2), Me.cbxFixRandomSeed.Checked)
 
         Me.nowStepIndex = 0
 

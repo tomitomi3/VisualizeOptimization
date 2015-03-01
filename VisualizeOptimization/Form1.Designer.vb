@@ -33,6 +33,7 @@ Partial Class Form1
         Me.btnInit = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
+        Me.cbxFixRandomSeed = New System.Windows.Forms.CheckBox()
         Me.ctrlPanel.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -55,8 +56,9 @@ Partial Class Form1
         '
         'ctrlPanel
         '
-        Me.ctrlPanel.Controls.Add(Me.cbxSelectOptmization)
         Me.ctrlPanel.Controls.Add(Me.lblIndex)
+        Me.ctrlPanel.Controls.Add(Me.cbxFixRandomSeed)
+        Me.ctrlPanel.Controls.Add(Me.cbxSelectOptmization)
         Me.ctrlPanel.Controls.Add(Me.tbxSkip)
         Me.ctrlPanel.Controls.Add(Me.Label1)
         Me.ctrlPanel.Controls.Add(Me.btnInit)
@@ -70,7 +72,6 @@ Partial Class Form1
         'cbxSelectOptmization
         '
         Me.cbxSelectOptmization.FormattingEnabled = True
-        Me.cbxSelectOptmization.Items.AddRange(New Object() {"NelderMead", "PatternSearch", "Genetic Algorithm REX with JGG", "Genetic Algorithm SPX with JGG"})
         Me.cbxSelectOptmization.Location = New System.Drawing.Point(3, 5)
         Me.cbxSelectOptmization.Name = "cbxSelectOptmization"
         Me.cbxSelectOptmization.Size = New System.Drawing.Size(184, 20)
@@ -79,7 +80,7 @@ Partial Class Form1
         'lblIndex
         '
         Me.lblIndex.AutoSize = True
-        Me.lblIndex.Location = New System.Drawing.Point(8, 36)
+        Me.lblIndex.Location = New System.Drawing.Point(194, 32)
         Me.lblIndex.Name = "lblIndex"
         Me.lblIndex.Size = New System.Drawing.Size(78, 12)
         Me.lblIndex.TabIndex = 6
@@ -128,6 +129,18 @@ Partial Class Form1
         Me.btnBack.Text = "<"
         Me.btnBack.UseVisualStyleBackColor = True
         '
+        'cbxFixRandomSeed
+        '
+        Me.cbxFixRandomSeed.AutoSize = True
+        Me.cbxFixRandomSeed.Checked = True
+        Me.cbxFixRandomSeed.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbxFixRandomSeed.Location = New System.Drawing.Point(3, 31)
+        Me.cbxFixRandomSeed.Name = "cbxFixRandomSeed"
+        Me.cbxFixRandomSeed.Size = New System.Drawing.Size(106, 16)
+        Me.cbxFixRandomSeed.TabIndex = 12
+        Me.cbxFixRandomSeed.Text = "FixRandomSeed"
+        Me.cbxFixRandomSeed.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -152,5 +165,6 @@ Partial Class Form1
     Friend WithEvents btnNext As System.Windows.Forms.Button
     Friend WithEvents btnBack As System.Windows.Forms.Button
     Friend WithEvents cbxSelectOptmization As System.Windows.Forms.ComboBox
+    Friend WithEvents cbxFixRandomSeed As System.Windows.Forms.CheckBox
 
 End Class
