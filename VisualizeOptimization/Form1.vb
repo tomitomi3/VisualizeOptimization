@@ -17,6 +17,7 @@ Public Class Form1
         PatternSearch
         GeneticAlgorithmREXwithJGG
         GeneticAlgorithmSPXwithJGG
+        GeneticAlgorithmUNDXwithJGG
         PSO
         PSOusingLDIW
         PSOusingCDIW
@@ -260,6 +261,8 @@ Public Class Form1
             Me.hist = New clsOptHistoryNelderMeadWiki()
         ElseIf tempType = EnumOptSeries.PatternSearch Then
             Me.hist = New clsOptHistoryHookeJeeves()
+        ElseIf tempType = EnumOptSeries.GeneticAlgorithmUNDXwithJGG Then
+            Me.hist = New clsOptHistoryRGAUNDX()
         ElseIf tempType = EnumOptSeries.GeneticAlgorithmREXwithJGG Then
             Me.hist = New clsOptHistoryRGAREX()
         ElseIf tempType = EnumOptSeries.GeneticAlgorithmSPXwithJGG Then
