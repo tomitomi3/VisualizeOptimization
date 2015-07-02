@@ -24,6 +24,8 @@ Public Class Form1
         PSOusingCRIW
         PSOusingAIW
         DE_rand_1_bin
+        DE_rand_2_bin
+        DE_best_1_bin
         DE_best_2_bin
         CS
     End Enum
@@ -282,6 +284,10 @@ Public Class Form1
             Me.hist = New clsOptHistoryPSOAIW()
         ElseIf tempType = EnumOptSeries.DE_rand_1_bin Then
             Me.hist = New clsOptHistoryDE_rand_1_bin()
+        ElseIf tempType = EnumOptSeries.DE_rand_2_bin Then
+            Me.hist = New clsOptHistoryDE_rand_2_bin()
+        ElseIf tempType = EnumOptSeries.DE_best_1_bin Then
+            Me.hist = New clsOptHistoryDE_best_1_bin()
         ElseIf tempType = EnumOptSeries.DE_best_2_bin Then
             Me.hist = New clsOptHistoryDE_best_2_bin()
         ElseIf tempType = EnumOptSeries.CS Then

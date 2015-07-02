@@ -19,7 +19,7 @@ Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
     ''' <param name="ai_func"></param>
     ''' <remarks></remarks>
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
-        Me.opt = New clsOptDE_best_2_bin(ai_func)
+        Me.opt = New clsOptDE(ai_func, clsOptDE.EnumDEStrategyType.DE_best_2_bin)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
         End If
