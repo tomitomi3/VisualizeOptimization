@@ -1,7 +1,7 @@
 ﻿Imports LibOptimization
 Imports LibOptimization.Optimization
 
-Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
+Public Class clsOptHistoryES : Inherits absOptimizationHistory
     Private histroyPoints As New List(Of List(Of List(Of Double)))
     Private histroyEvals As New List(Of List(Of Double))
 
@@ -19,7 +19,7 @@ Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
     ''' <param name="ai_func"></param>
     ''' <remarks></remarks>
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
-        Me.opt = New clsOptDE(ai_func, clsOptDE.EnumDEStrategyType.DE_best_2_bin)
+        Me.opt = New clsOptES(ai_func)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
             LibOptimization.Util.clsRandomXorshiftSingleton.GetInstance().SetDefaultSeed()

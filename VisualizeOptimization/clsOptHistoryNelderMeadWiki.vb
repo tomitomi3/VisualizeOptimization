@@ -22,13 +22,14 @@ Public Class clsOptHistoryNelderMeadWiki : Inherits absOptimizationHistory
         Me.opt = New clsOptNelderMeadWiki(ai_func)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
+            LibOptimization.Util.clsRandomXorshiftSingleton.GetInstance().SetDefaultSeed()
         End If
         Me.opt.Init()
 
         'Get simplex history
         Dim tempSimplex As New List(Of List(Of Double))
         Dim tempSimplexEvals As New List(Of Double)
-        For Each p As clsPoint In opt.ResultForDebug
+        For Each p As clsPoint In opt.Results
             Dim tempPoint As New clsPoint(p)
             tempSimplex.Add(tempPoint)
             tempSimplexEvals.Add(tempPoint.Eval)
@@ -38,7 +39,7 @@ Public Class clsOptHistoryNelderMeadWiki : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             tempSimplex = New List(Of List(Of Double))
             tempSimplexEvals = New List(Of Double)
-            For Each p As clsPoint In opt.ResultForDebug
+            For Each p As clsPoint In opt.Results
                 Dim tempPoint As New clsPoint(p)
                 tempSimplex.Add(tempPoint)
                 tempSimplexEvals.Add(tempPoint.Eval)

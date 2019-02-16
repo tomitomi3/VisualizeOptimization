@@ -1,7 +1,7 @@
 ﻿Imports LibOptimization
 Imports LibOptimization.Optimization
 
-Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
+Public Class clsOptHistoryStepestDescent : Inherits absOptimizationHistory
     Private histroyPoints As New List(Of List(Of List(Of Double)))
     Private histroyEvals As New List(Of List(Of Double))
 
@@ -19,7 +19,7 @@ Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
     ''' <param name="ai_func"></param>
     ''' <remarks></remarks>
     Public Overrides Sub Init(ai_func As absObjectiveFunction, ByVal ai_fixRandomSeed As Boolean)
-        Me.opt = New clsOptDE(ai_func, clsOptDE.EnumDEStrategyType.DE_best_2_bin)
+        Me.opt = New clsOptSteepestDescent(ai_func)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
             LibOptimization.Util.clsRandomXorshiftSingleton.GetInstance().SetDefaultSeed()
@@ -29,11 +29,11 @@ Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
         'initial value
         Dim oneStepPoints As New List(Of List(Of Double))
         Dim oneStepEvals As New List(Of Double)
-        For Each p As clsPoint In opt.Results
-            Dim tempPoint As New clsPoint(p)
-            oneStepPoints.Add(tempPoint)
-            oneStepEvals.Add(tempPoint.Eval)
-        Next
+
+        Dim tempPoint = New clsPoint(opt.Result)
+        oneStepPoints.Add(tempPoint)
+        oneStepEvals.Add(tempPoint.Eval)
+
         Me.histroyPoints.Add(oneStepPoints)
         Me.histroyEvals.Add(oneStepEvals)
 
@@ -41,11 +41,11 @@ Public Class clsOptHistoryDE_best_2_bin : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             oneStepPoints = New List(Of List(Of Double))
             oneStepEvals = New List(Of Double)
-            For Each p As clsPoint In opt.Results
-                Dim tempPoint As New clsPoint(p)
-                oneStepPoints.Add(tempPoint)
-                oneStepEvals.Add(tempPoint.Eval)
-            Next
+
+            tempPoint = New clsPoint(opt.Result)
+            oneStepPoints.Add(tempPoint)
+            oneStepEvals.Add(tempPoint.Eval)
+
             Me.histroyPoints.Add(oneStepPoints)
             Me.histroyEvals.Add(oneStepEvals)
         End While

@@ -26,14 +26,15 @@ Partial Class Form1
         Me.oPlot = New OxyPlot.WindowsForms.Plot()
         Me.oneShotTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ctrlPanel = New System.Windows.Forms.Panel()
-        Me.cbxSelectOptmization = New System.Windows.Forms.ComboBox()
         Me.lblIndex = New System.Windows.Forms.Label()
+        Me.cbxFixRandomSeed = New System.Windows.Forms.CheckBox()
+        Me.cbxSelectOptmization = New System.Windows.Forms.ComboBox()
         Me.tbxSkip = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btnInit = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
-        Me.cbxFixRandomSeed = New System.Windows.Forms.CheckBox()
+        Me.cbxObjectiveFunction = New System.Windows.Forms.ComboBox()
         Me.ctrlPanel.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -58,6 +59,7 @@ Partial Class Form1
         '
         Me.ctrlPanel.Controls.Add(Me.lblIndex)
         Me.ctrlPanel.Controls.Add(Me.cbxFixRandomSeed)
+        Me.ctrlPanel.Controls.Add(Me.cbxObjectiveFunction)
         Me.ctrlPanel.Controls.Add(Me.cbxSelectOptmization)
         Me.ctrlPanel.Controls.Add(Me.tbxSkip)
         Me.ctrlPanel.Controls.Add(Me.Label1)
@@ -66,8 +68,29 @@ Partial Class Form1
         Me.ctrlPanel.Controls.Add(Me.btnBack)
         Me.ctrlPanel.Location = New System.Drawing.Point(12, 12)
         Me.ctrlPanel.Name = "ctrlPanel"
-        Me.ctrlPanel.Size = New System.Drawing.Size(457, 59)
+        Me.ctrlPanel.Size = New System.Drawing.Size(457, 57)
         Me.ctrlPanel.TabIndex = 2
+        '
+        'lblIndex
+        '
+        Me.lblIndex.AutoSize = True
+        Me.lblIndex.Location = New System.Drawing.Point(199, 35)
+        Me.lblIndex.Name = "lblIndex"
+        Me.lblIndex.Size = New System.Drawing.Size(78, 12)
+        Me.lblIndex.TabIndex = 6
+        Me.lblIndex.Text = "Index aaa/bbb"
+        '
+        'cbxFixRandomSeed
+        '
+        Me.cbxFixRandomSeed.AutoSize = True
+        Me.cbxFixRandomSeed.Checked = True
+        Me.cbxFixRandomSeed.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbxFixRandomSeed.Location = New System.Drawing.Point(108, 34)
+        Me.cbxFixRandomSeed.Name = "cbxFixRandomSeed"
+        Me.cbxFixRandomSeed.Size = New System.Drawing.Size(85, 16)
+        Me.cbxFixRandomSeed.TabIndex = 12
+        Me.cbxFixRandomSeed.Text = "FixRndSeed"
+        Me.cbxFixRandomSeed.UseVisualStyleBackColor = True
         '
         'cbxSelectOptmization
         '
@@ -76,15 +99,6 @@ Partial Class Form1
         Me.cbxSelectOptmization.Name = "cbxSelectOptmization"
         Me.cbxSelectOptmization.Size = New System.Drawing.Size(184, 20)
         Me.cbxSelectOptmization.TabIndex = 3
-        '
-        'lblIndex
-        '
-        Me.lblIndex.AutoSize = True
-        Me.lblIndex.Location = New System.Drawing.Point(194, 32)
-        Me.lblIndex.Name = "lblIndex"
-        Me.lblIndex.Size = New System.Drawing.Size(78, 12)
-        Me.lblIndex.TabIndex = 6
-        Me.lblIndex.Text = "Index aaa/bbb"
         '
         'tbxSkip
         '
@@ -129,17 +143,13 @@ Partial Class Form1
         Me.btnBack.Text = "<"
         Me.btnBack.UseVisualStyleBackColor = True
         '
-        'cbxFixRandomSeed
+        'cbxObjectiveFunction
         '
-        Me.cbxFixRandomSeed.AutoSize = True
-        Me.cbxFixRandomSeed.Checked = True
-        Me.cbxFixRandomSeed.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbxFixRandomSeed.Location = New System.Drawing.Point(3, 31)
-        Me.cbxFixRandomSeed.Name = "cbxFixRandomSeed"
-        Me.cbxFixRandomSeed.Size = New System.Drawing.Size(106, 16)
-        Me.cbxFixRandomSeed.TabIndex = 12
-        Me.cbxFixRandomSeed.Text = "FixRandomSeed"
-        Me.cbxFixRandomSeed.UseVisualStyleBackColor = True
+        Me.cbxObjectiveFunction.FormattingEnabled = True
+        Me.cbxObjectiveFunction.Location = New System.Drawing.Point(3, 30)
+        Me.cbxObjectiveFunction.Name = "cbxObjectiveFunction"
+        Me.cbxObjectiveFunction.Size = New System.Drawing.Size(99, 20)
+        Me.cbxObjectiveFunction.TabIndex = 3
         '
         'Form1
         '
@@ -166,5 +176,5 @@ Partial Class Form1
     Friend WithEvents btnBack As System.Windows.Forms.Button
     Friend WithEvents cbxSelectOptmization As System.Windows.Forms.ComboBox
     Friend WithEvents cbxFixRandomSeed As System.Windows.Forms.CheckBox
-
+    Friend WithEvents cbxObjectiveFunction As ComboBox
 End Class

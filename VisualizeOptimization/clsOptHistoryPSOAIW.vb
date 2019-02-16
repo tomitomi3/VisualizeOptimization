@@ -28,7 +28,7 @@ Public Class clsOptHistoryPSOAIW : Inherits absOptimizationHistory
         'initial value
         Dim oneStepPoints As New List(Of List(Of Double))
         Dim oneStepEvals As New List(Of Double)
-        For Each p As clsPoint In opt.ResultForDebug
+        For Each p As clsPoint In opt.Results
             Dim tempPoint As New clsPoint(p)
             oneStepPoints.Add(tempPoint)
             oneStepEvals.Add(tempPoint.Eval)
@@ -40,7 +40,7 @@ Public Class clsOptHistoryPSOAIW : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             oneStepPoints = New List(Of List(Of Double))
             oneStepEvals = New List(Of Double)
-            For Each p As clsPoint In opt.ResultForDebug
+            For Each p As clsPoint In opt.Results
                 Dim tempPoint As New clsPoint(p)
                 oneStepPoints.Add(tempPoint)
                 oneStepEvals.Add(tempPoint.Eval)

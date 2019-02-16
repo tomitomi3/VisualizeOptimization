@@ -28,6 +28,8 @@ Public Class Form1
         DE_best_1_bin
         DE_best_2_bin
         CS
+        StepestDescent
+        ES
     End Enum
 
     ''' <summary>
@@ -57,6 +59,11 @@ Public Class Form1
             Me.cbxSelectOptmization.Items.Add(item.ToString())
         Next
         Me.cbxSelectOptmization.SelectedIndex = 0
+
+        Me.cbxObjectiveFunction.Items.Add("Sphere")
+        Me.cbxObjectiveFunction.Items.Add("Rosenblock")
+        Me.cbxObjectiveFunction.Items.Add("Rastrigin")
+        Me.cbxObjectiveFunction.SelectedIndex = 0
 
         'alloc console
         'AllocConsole()
@@ -202,10 +209,17 @@ Public Class Form1
 
         'BestPoint
         Dim points = New ScatterSeries()
-        points.MarkerType = MarkerType.Circle
-        points.Points.Add(New ScatterPoint(1, 1))
-        points.Points.Add(New ScatterPoint(1, 1))
-        points.MarkerSize = 2
+        If Me.cbxObjectiveFunction.SelectedIndex = 0 OrElse Me.cbxObjectiveFunction.SelectedIndex = 2 Then
+            points.MarkerType = MarkerType.Circle
+            points.Points.Add(New ScatterPoint(0, 0))
+            points.Points.Add(New ScatterPoint(0, 0))
+            points.MarkerSize = 2
+        Else
+            points.MarkerType = MarkerType.Circle
+            points.Points.Add(New ScatterPoint(1, 1))
+            points.Points.Add(New ScatterPoint(1, 1))
+            points.MarkerSize = 2
+        End If
         Me.oPlot.Model.Series.Add(points)
 
         'update label
@@ -292,17 +306,23 @@ Public Class Form1
             Me.hist = New clsOptHistoryDE_best_2_bin()
         ElseIf tempType = EnumOptSeries.CS Then
             Me.hist = New clsOptHistoryCS()
+        ElseIf tempType = EnumOptSeries.StepestDescent Then
+            Me.hist = New clsOptHistoryStepestDescent()
+        ElseIf tempType = EnumOptSeries.ES Then
+            Me.hist = New clsOptHistoryES()
         Else
             Me.hist = New clsOptHistoryPSOAIW()
         End If
 
         'initialize
-        Me.hist.Init(New LibOptimization.BenchmarkFunction.clsBenchRosenblock(2), Me.cbxFixRandomSeed.Checked)
-
+        If Me.cbxObjectiveFunction.SelectedIndex = 0 Then
+            Me.hist.Init(New LibOptimization.BenchmarkFunction.clsBenchSphere(2), Me.cbxFixRandomSeed.Checked)
+        ElseIf Me.cbxObjectiveFunction.SelectedIndex = 1 Then
+            Me.hist.Init(New LibOptimization.BenchmarkFunction.clsBenchRosenblock(2), Me.cbxFixRandomSeed.Checked)
+        Else
+            Me.hist.Init(New LibOptimization.BenchmarkFunction.clsBenchRastrigin(2), Me.cbxFixRandomSeed.Checked)
+        End If
         Me.nowStepIndex = 0
-
-        'Dim tempAxis() As Double = Me.GetEnvelope()
-        'Me.DrawInitAxis(tempAxis(0), tempAxis(1), tempAxis(2), tempAxis(3))
         Me.DrawInitAxis(-5, -5, 10, 10)
     End Sub
 End Class

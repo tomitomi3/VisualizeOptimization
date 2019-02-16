@@ -22,13 +22,14 @@ Public Class clsOptHistoryDE_rand_2_bin : Inherits absOptimizationHistory
         Me.opt = New clsOptDE(ai_func, clsOptDE.EnumDEStrategyType.DE_rand_2_bin)
         If ai_fixRandomSeed = True Then
             Me.opt.Random = New LibOptimization.Util.clsRandomXorshift(12345678)
+            LibOptimization.Util.clsRandomXorshiftSingleton.GetInstance().SetDefaultSeed()
         End If
         Me.opt.Init()
 
         'initial value
         Dim oneStepPoints As New List(Of List(Of Double))
         Dim oneStepEvals As New List(Of Double)
-        For Each p As clsPoint In opt.ResultForDebug
+        For Each p As clsPoint In opt.Results
             Dim tempPoint As New clsPoint(p)
             oneStepPoints.Add(tempPoint)
             oneStepEvals.Add(tempPoint.Eval)
@@ -40,7 +41,7 @@ Public Class clsOptHistoryDE_rand_2_bin : Inherits absOptimizationHistory
         While (Me.opt.DoIteration(1) = False)
             oneStepPoints = New List(Of List(Of Double))
             oneStepEvals = New List(Of Double)
-            For Each p As clsPoint In opt.ResultForDebug
+            For Each p As clsPoint In opt.Results
                 Dim tempPoint As New clsPoint(p)
                 oneStepPoints.Add(tempPoint)
                 oneStepEvals.Add(tempPoint.Eval)
